@@ -43,7 +43,7 @@ slr_gd <- function(dat, response, explanatory){
     print(iterations)
     print(betas)
 
-    if(iterations > max_iterations){
+    if(iterations >= max_iterations) {
       print("Too many iterations!")
     }
   }
@@ -86,7 +86,7 @@ mlr_gd <- function(dat, response) {
     data.matrix()
 
   betas <- matrix(0, nrow = ncol(x), ncol = 1)
-  SSE <- 99
+  SSE <- 1
   learning <- 0.015
   cutoff <-0.01
   iterations <-  0
@@ -100,8 +100,9 @@ mlr_gd <- function(dat, response) {
     print(iterations)
     print(betas)
 
-    if(iterations > max_iterations){
-      print("Too many iterations!")}
+    if(iterations >= max_iterations) {
+      print("Too many iterations!")
+    }
   }
 
   results <- t(betas) %>%
@@ -134,6 +135,7 @@ mlr_qr <- function(dat, response) {
   y <- dat %>%
     pull({{response}}) %>%
     data.matrix()
+
   x <- dat %>%
     select(-{{response}})
   x <- cbind(1, x) %>%
