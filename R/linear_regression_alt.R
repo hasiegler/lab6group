@@ -41,6 +41,7 @@ slr_gd <- function(dat, response, explanatory){
     error = sum(deriv^2)
     iterations <- iterations + 1
     print(iterations)
+    print(betas)
 
     if(iterations > max_iterations){
       print("Too many iterations!")
@@ -97,6 +98,7 @@ mlr_gd <- function(dat, response) {
     betas <- betas + learning * deriv
     iterations <- iterations + 1
     print(iterations)
+    print(betas)
 
     if(iterations > max_iterations){
       print("Too many iterations!")}
