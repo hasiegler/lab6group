@@ -19,14 +19,14 @@ slr_gd <- function(dat, response, explanatory){
   y <- dat %>%
     pull({{response}}) %>%
     scale() %>%
-    as.matrix()
+    data.matrix()
 
   x <- dat %>%
     pull({{explanatory}}) %>%
     scale()
 
   x <- cbind(1, x) %>%
-    as.matrix()
+    data.matrix()
 
   betas <- matrix(0, nrow = 2, ncol = 1)
   error <- 1
@@ -39,8 +39,12 @@ slr_gd <- function(dat, response, explanatory){
     deriv <- ((2 * t(x)) %*% (y - x %*% betas))
     betas <- betas + deriv *learning
     error = sum(deriv^2)
-    print(betas)
     iterations <- iterations + 1
+    print(iterations)
+
+    if(iterations > max_iterations){
+      print("Too many iterations!")
+    }
   }
 
   results <- data.table(t(betas))
@@ -73,26 +77,29 @@ mlr_gd <- function(dat, response) {
   y <- dat %>%
     pull({{response}}) %>%
     scale() %>%
-    as.matrix()
+    data.matrix()
   x <- dat %>%
     select(-{{response}}) %>%
     scale()
   x <- cbind(1, x) %>%
-    as.matrix()
+    data.matrix()
 
   betas <- matrix(0, nrow = ncol(x), ncol = 1)
   error <- 99
   learning <- 0.015
   cutoff <-0.01
   iterations <-  0
-  max_iterations <- 50
+  max_iterations <- 100
 
   while (error >= cutoff & iterations < max_iterations) {
     deriv <- ((2 * t(x)) %*% (y - x %*% betas))
     error <- sum(deriv^2)
     betas <- betas + learning * deriv
-    print(betas)
-    iterations + 1
+    iterations <- iterations + 1
+    print(iterations)
+
+    if(iterations > max_iterations){
+      print("Too many iterations!")}
   }
 
   results <- t(betas) %>%
@@ -124,11 +131,11 @@ mlr_qr <- function(dat, response) {
 
   y <- dat %>%
     pull({{response}}) %>%
-    as.matrix()
+    data.matrix()
   x <- dat %>%
     select(-{{response}})
   x <- cbind(1, x) %>%
-    as.matrix()
+    data.matrix()
 
   QR <- qr(x)
   results <- t(solve.qr(QR, y)) %>%
