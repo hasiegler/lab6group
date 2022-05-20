@@ -43,7 +43,8 @@ slr_gd <- function(dat, response, explanatory){
     print(iterations)
     print(betas)
 
-    if(iterations > max_iterations){
+    if(iterations >= max_iterations){
+      break
       print("Too many iterations!")
     }
   }
@@ -100,7 +101,8 @@ mlr_gd <- function(dat, response) {
     print(iterations)
     print(betas)
 
-    if(iterations > max_iterations){
+    if(iterations >= max_iterations){
+      break
       print("Too many iterations!")}
   }
 
