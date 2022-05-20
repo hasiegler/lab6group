@@ -29,7 +29,7 @@ slr_gd <- function(dat, response, explanatory){
     data.matrix()
 
   betas <- matrix(0, nrow = 2, ncol = 1)
-  error <- 1
+  SSE <- 1
   learning <- 0.015
   iterations <-  0
   cutoff <- .01
@@ -38,7 +38,7 @@ slr_gd <- function(dat, response, explanatory){
   while (error >= cutoff & iterations < max_iterations) {
     deriv <- ((2 * t(x)) %*% (y - x %*% betas))
     betas <- betas + deriv *learning
-    error = sum(deriv^2)
+    SSE = sum(deriv^2)
     iterations <- iterations + 1
     print(iterations)
     print(betas)
@@ -86,7 +86,7 @@ mlr_gd <- function(dat, response) {
     data.matrix()
 
   betas <- matrix(0, nrow = ncol(x), ncol = 1)
-  error <- 99
+  SSE <- 99
   learning <- 0.015
   cutoff <-0.01
   iterations <-  0
@@ -94,7 +94,7 @@ mlr_gd <- function(dat, response) {
 
   while (error >= cutoff & iterations < max_iterations) {
     deriv <- ((2 * t(x)) %*% (y - x %*% betas))
-    error <- sum(deriv^2)
+    SSE <- sum(deriv^2)
     betas <- betas + learning * deriv
     iterations <- iterations + 1
     print(iterations)
