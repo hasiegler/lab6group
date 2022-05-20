@@ -7,12 +7,10 @@
 #' @return A data frame of coefficients
 #'
 #' @import dplyr
+#' @import data.table
 #'
 #' @export
 slr_gd <- function(dat, response, explanatory){
-
-  ### Compute coefficients by gradient descent
-  ### Return a data frame of the same form as in the `simple_linear_regression`
 
   explan_name <- dat %>%
     select({{explanatory}}) %>%
@@ -31,28 +29,24 @@ slr_gd <- function(dat, response, explanatory){
     as.matrix()
 
   betas <- matrix(0, nrow = 2, ncol = 1)
-  error <- 99
-  learning <- 0.00001
+  error <- 1
+  learning <- 0.015
+  iterations <-  0
+  cutoff <- .01
+  max_iterations <- 50
 
-  while (error >= 0.001) {
+  while (error >= cutoff & iterations < max_iterations) {
     deriv <- ((2 * t(x)) %*% (y - x %*% betas))
-    error <- sum(deriv^2)
-    change <- learning * deriv
-    betas <- betas + change
+    betas <- betas + deriv *learning
+    error = sum(deriv^2)
+    print(betas)
+    iterations <- iterations + 1
   }
 
-  beta_0 <- betas[1]
-  beta_1 <- betas[2]
-
-  results <- tibble::tibble(
-    Intercept = beta_0,
-    Slope = beta_1
-  )
-
-  names(results)[2] <- explan_name
+  results <- data.table(t(betas))
+  colnames(results) <- c("Intercept", explan_name)
 
   return(results)
-
 }
 
 
@@ -71,6 +65,7 @@ slr_gd <- function(dat, response, explanatory){
 #' @return A data frame of coefficients
 #'
 #' @import dplyr
+#' @import data.table
 #'
 #'@export
 mlr_gd <- function(dat, response) {
@@ -87,25 +82,24 @@ mlr_gd <- function(dat, response) {
 
   betas <- matrix(0, nrow = ncol(x), ncol = 1)
   error <- 99
-  learning <- 0.00001
+  learning <- 0.015
+  cutoff <-0.01
+  iterations <-  0
+  max_iterations <- 50
 
-  while (error >= 0.00001) {
+  while (error >= cutoff & iterations < max_iterations) {
     deriv <- ((2 * t(x)) %*% (y - x %*% betas))
     error <- sum(deriv^2)
-    change <- learning * deriv
-    betas <- betas + change
+    betas <- betas + learning * deriv
+    print(betas)
+    iterations + 1
   }
 
   results <- t(betas) %>%
-    as.data.frame()
+    data.table()
 
   names(results)[1] <- "Intercept"
-
-  ### Compute coefficients by gradient descent
-  ### Return a data frame of the same form as in the `multiple_linear_regression`
-
   return(results)
-
 }
 
 #' Implements linear regression with many predictors by matrix decomposition
@@ -123,6 +117,7 @@ mlr_gd <- function(dat, response) {
 #' @return A data frame of coefficients
 #'
 #' @import dplyr
+#' @import data.table
 #'
 #'@export
 mlr_qr <- function(dat, response) {
@@ -137,7 +132,7 @@ mlr_qr <- function(dat, response) {
 
   QR <- qr(x)
   results <- t(solve.qr(QR, y)) %>%
-    as.data.frame()
+    data.table()
 
   names(results)[1] <- "Intercept"
 
