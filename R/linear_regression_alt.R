@@ -32,7 +32,7 @@ slr_gd <- function(dat, response, explanatory){
   error <- 1
   learning <- 0.015
   iterations <-  0
-  cutoff <- .01
+  cutoff <- .1
   max_iterations <- 50
 
   while (error >= cutoff & iterations < max_iterations) {
@@ -88,7 +88,7 @@ mlr_gd <- function(dat, response) {
   betas <- matrix(0, nrow = ncol(x), ncol = 1)
   error <- 99
   learning <- 0.015
-  cutoff <-0.01
+  cutoff <-0.1
   iterations <-  0
   max_iterations <- 100
 
