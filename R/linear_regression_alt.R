@@ -35,7 +35,7 @@ slr_gd <- function(dat, response, explanatory){
   cutoff <- .01
   max_iterations <- 50
 
-  while (error >= cutoff & iterations < max_iterations) {
+  while (SSE >= cutoff & iterations < max_iterations) {
     deriv <- ((2 * t(x)) %*% (y - x %*% betas))
     betas <- betas + deriv *learning
     SSE = sum(deriv^2)
@@ -92,7 +92,7 @@ mlr_gd <- function(dat, response) {
   iterations <-  0
   max_iterations <- 100
 
-  while (error >= cutoff & iterations < max_iterations) {
+  while (SSE >= cutoff & iterations < max_iterations) {
     deriv <- ((2 * t(x)) %*% (y - x %*% betas))
     SSE <- sum(deriv^2)
     betas <- betas + learning * deriv
